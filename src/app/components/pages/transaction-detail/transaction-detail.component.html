@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h2>Transaction</h2>
+    <div class="block-details">
+      <div class="-row"><span>Status</span> {{ transaction ? (transaction.status ? 'Confirmed' : 'Unconfirmed') : 'loading...' }} </div>
+      <div class="-row"><span>Timestamp</span> {{ transaction ? (transaction.timestamp * 1000 | date: 'short') : 'loading...' }} </div>
+      <div class="-row"><span>Block</span> {{ transaction ? transaction.block : 'loading...' }} </div>
+    </div>
+  </div>
+</div>
+
+<div class="transaction">
+  <div class="-title">
+    <div class="row">
+      <div class="col-sm-8 -left">
+        Transaction ID
+        <span (click)="openTransaction(transaction)" *ngIf="transaction">{{ transaction.id }}</span>
+        <span *ngIf="transaction === undefined">loading ..</span>
+      </div>
+      <div class="col-sm-4 -right">{{ transaction ? (transaction.timestamp * 1000 | date: 'short') : 'loading...' }}</div>
+    </div>
+  </div>
+  <div class="-header">
+    <div class="row">
+      <div class="col-sm-5 -left">Inputs</div>
+      <div class="col-sm-7">
+        <div class="width-3-4 gutter-right -left">Outputs</div>
+        <div class="width-1-4 gutter-left -right">Value</div>
+      </div>
+    </div>
+  </div>
+  <div class="-body" *ngIf="transaction">
+    <div class="row">
+      <div class="col-sm-5 -left">
+        <div class="-row" *ngFor="let input of transaction.inputs">
+          {{ input.hash }}
+        </div>
+      </div>
+      <div class="col-sm-7">
+        <div class="-row" *ngFor="let output of transaction.outputs">
+          <div class="width-3-4 gutter-right -left -link">
+            <span (click)="openAddress(output)">{{ output.address }}</span>
+          </div>
+          <div class="width-1-4 gutter-left -right">{{ output.coins }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

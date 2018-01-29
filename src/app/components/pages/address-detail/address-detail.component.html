@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-sm-8 -details">
+    <h2>{{ address }}</h2>
+    <p *ngIf="transactions !== undefined">
+      <span># of Transactions</span> {{ transactions.length }}
+    </p>
+    <p *ngIf="balance !== undefined">
+      <span>Balance</span> {{ balance | number:'1.0-6'}}
+    </p>
+  </div>
+  <div class="col-sm-4 -qr-code">
+    <app-qr-code [string]="address" *ngIf="address"></app-qr-code>
+  </div>
+</div>
+
+<p *ngIf="transactions === undefined">
+  Waiting for transactions <i class="fa fa-spinner fa-spin fa-fw"></i>
+</p>
+
+<div class="transaction" *ngFor="let transaction of (transactions || [])">
+  <div class="-title">
+    <div class="row">
+      <div class="col-sm-8 -left">
+        Transaction ID <span (click)="openTransaction(transaction)">{{ transaction.id }}</span>
+        <div class="-label" [ngClass]="{'-red' : transaction.balance < 0, '-green' : transaction.balance >= 0}">
+          {{ (transaction.balance<0?"":"+")+(transaction.balance | number:'1.0-6') }} SKY <ng-container *ngIf="!transaction.status">(pending)</ng-container>
+        </div>
+      </div>
+      <div class="col-sm-4 -right">{{ transaction.timestamp * 1000 | date: 'short' }}</div>
+    </div>
+  </div>
+  <div class="-header">
+    <div class="row">
+      <div class="col-sm-5 -left">Inputs</div>
+      <div class="col-sm-7">
+        <div class="width-3-4 gutter-right -left">Outputs</div>
+        <div class="width-1-4 gutter-left -right">Value</div>
+      </div>
+    </div>
+  </div>
+  <div class="-body">
+    <div class="row">
+      <div class="col-sm-5 -left">
+        <div class="-row" *ngFor="let input of transaction.inputs">
+          {{ input.hash }}
+        </div>
+      </div>
+      <div class="col-sm-7">
+        <div class="-row" *ngFor="let output of transaction.outputs">
+          <div class="width-3-4 gutter-right -left -link">
+            <span (click)="openAddress(output)">{{ output.address }}</span>
+          </div>
+          <div class="width-1-4 gutter-left -right">{{ output.coins }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
