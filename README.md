@@ -1,10 +1,10 @@
-![skycoin explorer logo](https://user-images.githubusercontent.com/26845312/32426909-047fb2ae-c283-11e7-8031-6e88585a53c8.png)
+[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](https://mdl.life)
 
-# Skycoin Explorer
+# MDL Explorer
 
-[![Build Status](https://travis-ci.org/skycoin/skycoin-explorer.svg)](https://travis-ci.org/skycoin/skycoin-explorer)
+[![Build Status](https://travis-ci.org/MDLlife/explorer.svg)](https://travis-ci.org/MDLlife/explorer)
 
-https://explorer.skycoin.net
+https://explorer.mdl.life
 
 ## Requirements
 
@@ -18,7 +18,7 @@ npm>=3.10.10
 
 The server is written in golang.
 
-The golang server returns the static content from `dist/` and proxies a subset of the skycoin node API.
+The golang server returns the static content from `dist/` and proxies a subset of the MDL node API.
 
 ### Angular
 
@@ -30,11 +30,11 @@ The angular code is compiled to the `dist/` folder.
 
 ## Usage
 
-### Run a skycoin node
+### Run MDL node
 
 ```sh
-git clone github.com/skycoin/skycoin
-cd skycoin
+go get github.com/MDLlife/MDL
+cd $GOPATH/src/github.com/MDLlife/MDL
 ./run.sh
 ```
 
@@ -46,12 +46,12 @@ make run
 
 This must be run from the same directory that contains `dist/`.
 
-The explorer assumes that the skycoin node is running on `localhost:6420` by default.
+The explorer assumes that the MDL node is running on `localhost:8320` by default.
 
 To point it at a different address:
 
 ```sh
-SKYCOIN_ADDR=http://127.0.0.1:3333 ./explorer
+MDL_ADDR=http://127.0.0.1:3333 ./explorer
 ```
 
 `explorer` can be run in api-only mode, which will expose the JSON API but not serve the static content from `dist/`:
@@ -63,24 +63,15 @@ make run-api
 ### Docker images
 
 ```
-$ docker build -t skycoin/skycoint-explorer .
-$ docker run -p 8001:8001 skycoin/skycoin-explorer
+$ docker build -t MDLlife/explorer .
+$ docker run -p 8001:8001 MDLlife/explorer
 ```
 
 Access the explorer: [http://localhost:8001](http://localhost:8001).
 
-The `SKYCOIN_ADDR` and the `EXPLORER_HOST` environment variables can be passed
+The `MDL_ADDR` and the `EXPLORER_HOST` environment variables can be passed
 to the running container to modify the default behavior.
 
-## API documentation
-
-HTML documentation:
-
-http://explorer.skycoin.net/api.html
-
-JSON formatted API docs:
-
-http://explorer.skycoin.net/api/docs
 
 ## Development
 

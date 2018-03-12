@@ -8,7 +8,7 @@ This must be run from the same folder as ./dist, unless run in -api-only mode.
 
 Environment options:
 * EXPLORER_HOST - The addr:port to bind the explorer to. Do not include a scheme. Defaults to 127.0.0.1:8001
-* SKYCOIN_ADDR - The skycoin node's address. You must include a scheme. Defaults to http://127.0.0.1:6420
+* MDL_ADDR - The skycoin node's address. You must include a scheme. Defaults to http://127.0.0.1:6420
 
 CLI Options:
 * -api-only - Don't serve static content from ./dist, only proxy the skycoin node
@@ -51,7 +51,7 @@ const (
 
 var (
 	explorerHost = ""     // override with envvar EXPLORER_HOST.  Must not have scheme
-	skycoinAddr  *url.URL // override with envvar SKYCOIN_ADDR.  Must have scheme, e.g. http://
+	skycoinAddr  *url.URL // override with envvar MDL_ADDR.  Must have scheme, e.g. http://
 	apiOnly      bool     // set to true with -api-only cli flag
 	verify       bool     // set to true with -verify cli flag. Check init() conditions and quits.
 )
@@ -62,19 +62,19 @@ func init() {
 		explorerHost = defaultExplorerHost
 	}
 
-	skycoinAddrString := os.Getenv("SKYCOIN_ADDR")
+	skycoinAddrString := os.Getenv("MDL_ADDR")
 	if skycoinAddrString == "" {
 		skycoinAddrString = defaultSkycoinAddr
 	}
 
 	origURL, err := url.Parse(skycoinAddrString)
 	if err != nil {
-		log.Println("SKYCOIN_ADDR must have a scheme, e.g. http://")
-		log.Fatalln("Invalid SKYCOIN_ADDR", skycoinAddrString, err)
+		log.Println("MDL_ADDR must have a scheme, e.g. http://")
+		log.Fatalln("Invalid MDL_ADDR", skycoinAddrString, err)
 	}
 
 	if origURL.Scheme == "" {
-		log.Fatalln("SKYCOIN_ADDR must have a scheme, e.g. http://")
+		log.Fatalln("MDL_ADDR must have a scheme, e.g. http://")
 	}
 
 	skycoinAddr = &url.URL{
@@ -687,7 +687,7 @@ code.inline { border-radius: 3px; padding: 0.2em; background-color: #F7FAFB; fon
 <p>All endpoints start with /api</p>
 <p>Further information about an endpoint can be found at the Skycoin repo.</p>
 <p>Skycoin Github:<a href="https://github.com/skycoin/skycoin">https://github.com/skycoin/skycoin</a>.</p>
-<p>Skycoin Explorer Github: <a href="https://github.com/skycoin/skycoin-explorer">https://github.com/skycoin/skycoin-explorer</a></p>
+<p>Skycoin Explorer Github: <a href="https://github.com/MDLlife/explorer">https://github.com/MDLlife/explorer</a></p>
 </p>
 </div>
 

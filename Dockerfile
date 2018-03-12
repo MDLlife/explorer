@@ -22,7 +22,7 @@ COPY --from=build /go/bin/* /usr/bin/
 COPY --from=build /go/src/github.com/skycoin/skycoin-explorer/dist ./dist
 
 ENV EXPLORER_HOST="0.0.0.0:8001" \ 
-    SKYCOIN_ADDRESS="http://127.0.0.1:6420"
+    MDL_ADDRESS="http://127.0.0.1:6420"
 
 EXPOSE 8001
 
