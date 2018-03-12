@@ -1,6 +1,6 @@
 {
   "/api/coinSupply": {
-    "target": "http://explorer.skycoin.net",
+    "target": "http://explorer.mdl.life",
     "pathRewrite": {
       "^/api/coinSupply" : "explorer/getEffectiveOutputs"
     },
@@ -8,7 +8,7 @@
     "logLevel": "debug"
   },
   "/api/outputs": {
-    "target": "http://explorer.skycoin.net",
+    "target": "http://explorer.mdl.life",
     "pathRewrite": {
       "^/api/outputs" : "currentBalance"
     },
@@ -16,7 +16,7 @@
     "logLevel": "debug"
   },
   "/api/address": {
-    "target": "http://explorer.skycoin.net",
+    "target": "http://explorer.mdl.life",
     "pathRewrite": {
       "^/api/address" : "explorer/address"
     },
@@ -24,7 +24,7 @@
     "logLevel": "debug"
   },
   "/api/*": {
-    "target": "http://explorer.skycoin.net",
+    "target": "http://explorer.mdl.life",
     "pathRewrite": {
       "^/api" : ""
     },
