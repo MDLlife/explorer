@@ -15,9 +15,14 @@ export class BlocksComponent implements OnInit {
   blocks: Block[] = [];
   currentSupply: number;
   totalSupply: number;
+  currentCoinhourSupply: number;
+  totalCoinhourSupply: number;
   blockCount = 0;
   pageIndex = 0;
   pageSize = 10;
+  loadingCoinSupplyMsg = "Loading...";
+  loadingMetadataMsg = "Loading...";
+  longErrorMsg: string;
 
   get pageCount() {
     return Math.ceil(this.blockCount / this.pageSize);
@@ -38,20 +43,20 @@ export class BlocksComponent implements OnInit {
           const pageIndex = parseInt(params.get('page'), 10) - 1;
           this.navigate(pageIndex)
         });
+    }, error => {
+      this.loadingMetadataMsg = "Loading error";
+      this.longErrorMsg = "Error loading data, try again later...";
     });
 
     this.api.getCoinSupply().first().subscribe(response => {
       this.currentSupply = response.current_supply;
       this.totalSupply = response.total_supply;
-    })
+      this.currentCoinhourSupply = response.current_coinhour_supply;
+      this.totalCoinhourSupply = response.total_coinhour_supply;
+    }, error => {
+      this.loadingCoinSupplyMsg = "Loading error";
+    });
 
-  }
-
-  open(block: Block) {
-    this.router.navigate(['/app/block', block.id]);
-  }
-  openUnconfirmedTransactions() {
-    this.router.navigate(['/app/unconfirmedtransactions']);
   }
 
   navigate(pageIndex) {

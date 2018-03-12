@@ -45,11 +45,10 @@ h2 {
     line-height: 20px;
     padding: 15px 20px;
 
-    span {
+    a {
       color: $primary;
       display: inline-block;
       margin-left: 15px;
-      cursor: pointer;
     }
   }
 
@@ -74,6 +73,14 @@ h2 {
       &:last-child {
         border-bottom: none;
       }
+    }
+
+    .-final-balance {
+      border-top: 1px solid #EFF0F0;
+      padding: 10px 12px;
+    }
+    .-transparent {
+      opacity: 0.25;
     }
   }
 

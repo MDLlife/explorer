@@ -15,13 +15,18 @@ export class ExplorerService {
 
   getBlock(id: number): Observable<Block> {
     return this.api.getBlocks(id, id).flatMap(response => {
-      const block = parseGetBlocksBlock(response.blocks[0]);
-      return Observable.forkJoin(block.transactions.map(transaction => {
-        return this.retrieveInputsForTransaction(transaction);
-      })).map(transactions => {
-        block.transactions = transactions;
-        return block;
-      });
+      if (response.blocks.length > 0) {
+        const block = parseGetBlocksBlock(response.blocks[0]);
+        return Observable.forkJoin(block.transactions.map(transaction => {
+          return this.retrieveInputsForTransaction(transaction);
+        })).map(transactions => {
+          block.transactions = transactions;
+          return block;
+        });
+      } else {
+        let emptyArray: Block[] = [null];
+        return emptyArray;
+      }
     });
   }
 
@@ -36,7 +41,17 @@ export class ExplorerService {
 
   getTransactions(address: string): Observable<Transaction[]> {
     return this.api.getAddress(address)
-      .map(response => response.map(rawTx => parseGetAddressTransaction(rawTx, address)))
+      .map(response => {
+        response = response.sort((a, b) => b.timestamp - a.timestamp)
+
+        let currentBalance = 0;
+        return response.reverse().map(rawTx => {
+          let parsedTx = parseGetAddressTransaction(rawTx, address);
+          currentBalance += parsedTx.balance;
+          parsedTx.addressBalance = currentBalance;
+          return parsedTx;
+        }).reverse()
+      })
   }
 
   getUnconfirmedTransactions(): Observable<UnconfirmedTransaction[]> {

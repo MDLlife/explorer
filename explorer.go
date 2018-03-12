@@ -37,7 +37,7 @@ import (
 
 const (
 	defaultExplorerHost = "127.0.0.1:8001"
-	defaultSkycoinAddr  = "http://127.0.0.1:6420"
+	defaultSkycoinAddr  = "http://127.0.0.1:8320"
 
 	// timeout for requests to the backend skycoin node
 	skycoinRequestTimeout = time.Second * 30
@@ -579,19 +579,31 @@ var apiEndpoints = []APIEndpoint{
 		SkycoinPath:    "/richlist",
 		QueryArgs:      []string{"n", "include-distribution"},
 		Description:    "Returns top N richer with unspect outputs, If no n are specified, returns 20.",
-		ExampleRequest: "/api/richlist?n=2&include-distribution=false",
-		ExampleResponse: `[
-    {
-        "address": "tWZ11Nvor9parjg4FkwxNVcby59WVTw2iL",
-        "coins": "1000000.000000",
-        "locked": false
-    },
-    {
-        "address": "2UYPbDBnHUEc67e7qD4eXtQQ6zfU2cyvAvk",
-        "coins": "1000000.000000",
-        "locked": false
-    }
-]`,
+		ExampleRequest: "/api/richlist?n=4&include-distribution=false",
+		ExampleResponse: `{
+    "richlist": [
+        {
+            "address": "zMDywYdGEDtTSvWnCyc3qsYHWwj9ogws74",
+            "coins": "1000000.000000",
+            "locked": false
+        },
+        {
+            "address": "z6CJZfYLvmd41GRVE8HASjRcy5hqbpHZvE",
+            "coins": "1000000.000000",
+            "locked": false
+        },
+        {
+            "address": "wyQVmno9aBJZmQ99nDSLoYWwp7YDJCWsrH",
+            "coins": "1000000.000000",
+            "locked": false
+        },
+        {
+            "address": "tBaeg9zE2sgmw5ZQENaPPYd6jfwpVpGTzS",
+            "coins": "1000000.000000",
+            "locked": false
+        }
+    ]
+}`,
 	},
 	{
 		ExplorerPath:   "/api/addresscount",

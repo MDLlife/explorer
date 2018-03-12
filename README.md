@@ -1,9 +1,10 @@
-[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](http://mdl.life)
+![skycoin explorer logo](https://user-images.githubusercontent.com/26845312/32426909-047fb2ae-c283-11e7-8031-6e88585a53c8.png)
 
-# MDL Token Explorer
+# Skycoin Explorer
 
-[![Build Status](https://travis-ci.org/MDLlife/explorer.svg)](https://travis-ci.org/MDLlife/explorer)
+[![Build Status](https://travis-ci.org/skycoin/skycoin-explorer.svg)](https://travis-ci.org/skycoin/skycoin-explorer)
 
+https://explorer.skycoin.net
 
 ## Requirements
 
@@ -17,7 +18,7 @@ npm>=3.10.10
 
 The server is written in golang.
 
-The golang server returns the static content from `dist/` and proxies a subset of the MDL (skycoin) node API.
+The golang server returns the static content from `dist/` and proxies a subset of the skycoin node API.
 
 ### Angular
 
@@ -29,11 +30,11 @@ The angular code is compiled to the `dist/` folder.
 
 ## Usage
 
-### Run an MDL node
+### Run a skycoin node
 
 ```sh
-go get github.com/MDLlife/MDL
-cd $GOPATH/src/github.com/MDLlife/MDL
+git clone github.com/skycoin/skycoin
+cd skycoin
 ./run.sh
 ```
 
@@ -45,7 +46,7 @@ make run
 
 This must be run from the same directory that contains `dist/`.
 
-The explorer assumes that the MDL node is running on `localhost:7800` by default.
+The explorer assumes that the skycoin node is running on `localhost:6420` by default.
 
 To point it at a different address:
 
@@ -58,6 +59,18 @@ SKYCOIN_ADDR=http://127.0.0.1:3333 ./explorer
 ```sh
 make run-api
 ```
+
+### Docker images
+
+```
+$ docker build -t skycoin/skycoint-explorer .
+$ docker run -p 8001:8001 skycoin/skycoin-explorer
+```
+
+Access the explorer: [http://localhost:8001](http://localhost:8001).
+
+The `SKYCOIN_ADDR` and the `EXPLORER_HOST` environment variables can be passed
+to the running container to modify the default behavior.
 
 ## API documentation
 
