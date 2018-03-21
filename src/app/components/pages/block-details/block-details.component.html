@@ -6,7 +6,7 @@
     <div class="-row"><span>Timestamp</span> {{ block ? ((block.timestamp * 1000) | date: 'short') : loadingMsg }} </div>
     <div class="-row"><span>Hash</span> <a [routerLink]="'/app/block/' + block.id" class="-link" *ngIf="block">{{ block.hash }}</a> <span *ngIf="!block">{{ loadingMsg }}</span> </div>
     <div class="-row"><span>Parent Hash</span> <a [routerLink]="'/app/block/' + (block.id-1)" class="-link" *ngIf="block && block.parent_hash">{{ block.parent_hash }}</a> <span *ngIf="block && !block.parent_hash">Without parent block</span> <span *ngIf="!block">{{ loadingMsg }}</span> </div>
-    <div class="-row"><span>Total Amount</span> {{ block ? (block.transactions | transactionsValue) + ' SKY' : loadingMsg }} </div>
+    <div class="-row"><span>Total Amount</span> {{ block ? (block.transactions | transactionsValue) + ' MDL' : loadingMsg }} </div>
   </div>
 
   <p *ngIf="!block">

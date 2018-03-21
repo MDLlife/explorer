@@ -670,7 +670,7 @@ func jsonDocs(w http.ResponseWriter, r *http.Request) {
 }
 
 const docTemplate string = `<html><head>
-<title>Skycoin Explorer API Documentation</title>
+<title>MDL Explorer API Documentation</title>
 <style type="text/css">
 code { white-space: pre; }
 pre { background: #F7FAFB; }
@@ -679,15 +679,15 @@ code.inline { border-radius: 3px; padding: 0.2em; background-color: #F7FAFB; fon
 </style>
 </head><body><div id="main">
 
-<h1>Skycoin Explorer API Documentation</h1>
+<h1>MDL Explorer API Documentation</h1>
 
 <div>
 <p>
-<p>The Skycoin Explorer API proxies a subset of a Skycoin node's API.</p>
+<p>The MDL Explorer API proxies a subset of a Skycoin node's API.</p>
 <p>All endpoints start with /api</p>
 <p>Further information about an endpoint can be found at the Skycoin repo.</p>
 <p>Skycoin Github:<a href="https://github.com/skycoin/skycoin">https://github.com/skycoin/skycoin</a>.</p>
-<p>Skycoin Explorer Github: <a href="https://github.com/MDLlife/explorer">https://github.com/MDLlife/explorer</a></p>
+<p>MDL Explorer Github: <a href="https://github.com/MDLlife/explorer">https://github.com/MDLlife/explorer</a></p>
 </p>
 </div>
 
