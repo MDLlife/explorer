@@ -62,15 +62,15 @@ func init() {
 		explorerHost = defaultExplorerHost
 	}
 
-	skycoinAddrString := os.Getenv("MDL_ADDR")
-	if skycoinAddrString == "" {
-		skycoinAddrString = defaultSkycoinAddr
+	mdlAddrString := os.Getenv("MDL_ADDR")
+	if mdlAddrString == "" {
+		mdlAddrString = defaultSkycoinAddr
 	}
 
-	origURL, err := url.Parse(skycoinAddrString)
+	origURL, err := url.Parse(mdlAddrString)
 	if err != nil {
 		log.Println("MDL_ADDR must have a scheme, e.g. http://")
-		log.Fatalln("Invalid MDL_ADDR", skycoinAddrString, err)
+		log.Fatalln("Invalid MDL_ADDR", mdlAddrString, err)
 	}
 
 	if origURL.Scheme == "" {
