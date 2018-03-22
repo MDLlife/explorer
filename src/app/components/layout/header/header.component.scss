@@ -1,6 +1,6 @@
 @import '../../../../assets/scss/_variables.scss';
 
-$header-height: 68px;
+$header-height: 58px;
 
 nav {
   background-color: white;
@@ -12,6 +12,7 @@ nav {
   img {
     cursor: pointer;
     height: $header-height;
+    padding: 8px;
   }
 
   .-back-link {
