@@ -13,6 +13,8 @@ nav {
     cursor: pointer;
     height: $header-height;
     padding: 8px;
+    position: relative;
+    top: 4px;
   }
 
   .-back-link {
