@@ -1,5 +1,5 @@
 .-search-bar-container {
-  margin-top: 13px;
+  margin: 4rem 0 2rem;
   position: relative;
 
   img {
@@ -7,6 +7,12 @@
     height: 20px;
     margin: 11px;
     position: absolute;
+  }
+
+  i {
+    margin: 13px 11px;
+    position: absolute;
+    font-size: 17px;
   }
 
   input {

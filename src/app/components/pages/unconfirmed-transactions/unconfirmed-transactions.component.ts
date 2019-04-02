@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ExplorerService } from '../../../services/explorer/explorer.service';
-import { Output, UnconfirmedTransaction } from '../../../app.datatypes';
+import { Transaction } from '../../../app.datatypes';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-unconfirmed-transactions',
@@ -12,30 +12,36 @@ import 'rxjs/add/operator/switchMap';
 })
 export class UnconfirmedTransactionsComponent implements OnInit {
 
-  transactions: UnconfirmedTransaction[];
+  transactions: Transaction[];
   leastRecent: number;
   mostRecent: number;
-  loadingMsg = "Loading...";
+  totalSize: number;
+  loadingMsg = '';
   longErrorMsg: string;
 
   constructor(
     private explorer: ExplorerService,
-    private router: Router
+    private translate: TranslateService
   ) {
-    this.transactions = null;
+    translate.get('general.loadingMsg').subscribe((res: string) => {
+      this.loadingMsg = res;
+    });
   }
 
   ngOnInit() {
     this.explorer.getUnconfirmedTransactions().subscribe(transactions => {
       this.transactions = transactions;
       if (transactions.length > 0) {
-        let orderedList = transactions.sort((a, b) => b.timestamp - a.timestamp);
+        const orderedList = transactions.sort((a, b) => b.timestamp - a.timestamp);
         this.mostRecent = orderedList[0].timestamp;
-        this.leastRecent = orderedList[orderedList.length-1].timestamp;
+        this.leastRecent = orderedList[orderedList.length - 1].timestamp;
+        this.totalSize = orderedList.map(tx => tx.length).reduce((sum, current) => sum + current);
       }
     }, error => {
-      this.loadingMsg = "Loading error";
-      this.longErrorMsg = "Error loading data, try again later...";
+      this.translate.get(['general.shortLoadingErrorMsg', 'general.longLoadingErrorMsg']).subscribe((res: string[]) => {
+        this.loadingMsg = res['general.shortLoadingErrorMsg'];
+        this.longErrorMsg = res['general.longLoadingErrorMsg'];
+      });
     });
   }
 }

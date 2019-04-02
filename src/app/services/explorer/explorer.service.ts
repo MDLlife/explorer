@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { Observable } from 'rxjs/Observable';
-import { Block, Output, parseGetAddressTransaction, parseGetBlocksBlock, parseGetTransaction, parseGetUnconfirmedTransaction, parseGetUxout, UnconfirmedTransaction, Transaction } from '../../app.datatypes';
+import { Block, parseGenericTransaction, parseGenericBlock, parseGetUnconfirmedTransaction, Transaction, parseGetTransaction } from '../../app.datatypes';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/of';
+import { BigNumber } from 'bignumber.js';
 
 @Injectable()
 export class ExplorerService {
@@ -14,67 +16,41 @@ export class ExplorerService {
   ) { }
 
   getBlock(id: number): Observable<Block> {
-    return this.api.getBlocks(id, id).flatMap(response => {
-      if (response.blocks.length > 0) {
-        const block = parseGetBlocksBlock(response.blocks[0]);
-        return Observable.forkJoin(block.transactions.map(transaction => {
-          return this.retrieveInputsForTransaction(transaction);
-        })).map(transactions => {
-          block.transactions = transactions;
-          return block;
-        });
-      } else {
-        let emptyArray: Block[] = [null];
-        return emptyArray;
-      }
-    });
+   return this.api.getBlockById(id).map(response => parseGenericBlock(response));
   }
 
   getBlocks(start: number, end: number): Observable<Block[]> {
     return this.api.getBlocks(start, end)
-      .map(response => response.blocks.map(block => parseGetBlocksBlock(block)).sort((a, b) => b.id - a.id));
+      .map(response => response.blocks.map(block => parseGenericBlock(block)).sort((a, b) => b.id - a.id));
   }
 
   getBlockByHash(hash: string): Observable<Block> {
-    return this.api.getBlock(hash).map(response => parseGetBlocksBlock(response));
+    return this.api.getBlockByHash(hash).map(response => parseGenericBlock(response));
   }
 
   getTransactions(address: string): Observable<Transaction[]> {
     return this.api.getAddress(address)
       .map(response => {
-        response = response.sort((a, b) => b.timestamp - a.timestamp)
+        response = response.sort((a, b) => a.txn.timestamp - b.txn.timestamp);
 
-        let currentBalance = 0;
-        return response.reverse().map(rawTx => {
-          let parsedTx = parseGetAddressTransaction(rawTx, address);
-          currentBalance += parsedTx.balance;
-          parsedTx.addressBalance = currentBalance;
+        let currentBalance = new BigNumber('0');
+        return response.map(rawTx => {
+          const parsedTx = parseGetTransaction(rawTx, address);
+          parsedTx.initialBalance = currentBalance;
+          currentBalance = currentBalance.plus(parsedTx.balance);
+          parsedTx.finalBalance = currentBalance;
           return parsedTx;
-        }).reverse()
-      })
+        }).reverse();
+      });
   }
 
-  getUnconfirmedTransactions(): Observable<UnconfirmedTransaction[]> {
+  getUnconfirmedTransactions(): Observable<Transaction[]> {
     return this.api.getUnconfirmedTransactions()
       .map(response => response.map(rawTx => parseGetUnconfirmedTransaction(rawTx)));
   }
 
   getTransaction(transactionId: string): Observable<Transaction> {
     return this.api.getTransaction(transactionId)
-      .map(response => parseGetTransaction(response))
-      .flatMap(transaction => this.retrieveInputsForTransaction(transaction));
-  }
-
-  private retrieveInputsForTransaction(transaction: Transaction): Observable<Transaction> {
-    return Observable.forkJoin(transaction.inputs.map(input => {
-      return this.retrieveOutputById(input.hash);
-    })).map(inputs => {
-      transaction.inputs = inputs;
-      return transaction;
-    });
-  }
-
-  private retrieveOutputById(id): Observable<Output> {
-    return this.api.getUxout(id).map(response => parseGetUxout(response))
+      .map(response => parseGetTransaction(response));
   }
 }

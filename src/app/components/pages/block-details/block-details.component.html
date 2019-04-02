@@ -1,54 +1,30 @@
-<script src="../../../../typings.d.ts"></script>
-<div class="container">
-  <h2>Block Details</h2>
-  <div class="block-details">
-    <div class="-row"><span>Height</span> {{ block ? block.id : loadingMsg }} </div>
-    <div class="-row"><span>Timestamp</span> {{ block ? ((block.timestamp * 1000) | date: 'short') : loadingMsg }} </div>
-    <div class="-row"><span>Hash</span> <a [routerLink]="'/app/block/' + block.id" class="-link" *ngIf="block">{{ block.hash }}</a> <span *ngIf="!block">{{ loadingMsg }}</span> </div>
-    <div class="-row"><span>Parent Hash</span> <a [routerLink]="'/app/block/' + (block.id-1)" class="-link" *ngIf="block && block.parent_hash">{{ block.parent_hash }}</a> <span *ngIf="block && !block.parent_hash">Without parent block</span> <span *ngIf="!block">{{ loadingMsg }}</span> </div>
-    <div class="-row"><span>Total Amount</span> {{ block ? (block.transactions | transactionsValue) + ' MDL' : loadingMsg }} </div>
-  </div>
-
-  <p *ngIf="!block">
-    <span *ngIf="!longErrorMsg; else error_msg">
-      Waiting for transactions <i class="fa fa-spinner fa-spin fa-fw"></i>
-    </span>
-    <ng-template #error_msg>{{ longErrorMsg }}</ng-template>
-  </p>
-
-  <div class="transactions" *ngIf="block && block.transactions.length >= 0">
-    <div class="-header">
-      <div class="row">
-        <div class="col-sm-2">Transaction ID</div>
-        <div class="col-sm-5">
-          <div class="width-4-5 gutter-right">Inputs</div>
-          <div class="width-1-5 gutter-left">Value</div>
-        </div>
-        <div class="col-sm-5">
-          <div class="width-4-5 gutter-right">Outputs</div>
-          <div class="width-1-5 gutter-left">Value</div>
-        </div>
-      </div>
-    </div>
-    <div class="-body">
-      <div class="row" *ngFor="let transaction of block.transactions">
-        <div class="col-sm-2 -primary">
-          <a class="-cell" [routerLink]="'/app/transaction/' + transaction.id">
-            {{ transaction.id }}
-          </a>
-        </div>
-        <div class="col-sm-5">
-          <div class="-row" *ngFor="let input of transaction.inputs">
-            <div class="width-4-5 gutter-right">{{ input.hash }}</div>
-            <div class="width-1-5 gutter-left">{{ input.coins }}</div>
-          </div>
-        </div>
-        <div class="col-sm-5">
-          <div class="-row" *ngFor="let output of transaction.outputs">
-            <div class="width-4-5 gutter-right"><a [routerLink]="'/app/address/' + output.address">{{ output.address }}</a></div>
-            <div class="width-1-5 gutter-left">{{ output.coins }}</div>
-          </div>
+<div class="element-details-wrapper">
+  <div>
+    <div class="header-container">
+      <h2>{{ 'blockDetails.title' | translate }}</h2>
+      <div class="nav-button-container" *ngIf="blockCount && block != undefined">
+        <a [routerLink]="'/app/block/' + (block.id - 1)" class="nav-button" *ngIf="block.id > 0">
+          <span class="font-awesome">&#xf104;</span> <span class="-not-xs">{{ 'blockDetails.previous' | translate }}</span>
+        </a>
+        <span *ngIf="block.id > 0 && block.id < blockCount" class="-not-xs">&nbsp;</span>
+        <a [routerLink]="'/app/block/' + (block.id + 1)" class="nav-button" *ngIf="block.id < blockCount">
+          <span class="-not-xs">{{ 'blockDetails.next' | translate }}</span> <span class="font-awesome">&#xf105;</span>
+        </a>
       </div>
     </div>
   </div>
+  <div class="element-details">
+    <div class="-row"><span>{{ 'blockDetails.height' | translate }}</span><br class="-xs-only" /><div> {{ block ? block.id : loadingMsg }} </div></div>
+    <div class="-row"><span>{{ 'blockDetails.timestamp' | translate }}</span><br class="-xs-only" /><div> <app-date-formatter *ngIf="block" [date]="block.timestamp"></app-date-formatter> <span *ngIf="!block">{{ loadingMsg }}</span> </div></div>
+    <div class="-row"><span>{{ 'blockDetails.size' | translate }}</span><br class="-xs-only" /><div> {{ block ? (block.size | number) + ' bytes' : loadingMsg }} </div></div>
+    <div class="-row"><span>{{ 'blockDetails.hash' | translate }}</span><br class="-xs-only" /><div> <a [routerLink]="'/app/block/' + block.id" class="-link" *ngIf="block">{{ block.hash }}</a> <app-copy-button [text]="block.hash" *ngIf="block"></app-copy-button> <span *ngIf="!block">{{ loadingMsg }}</span> </div></div>
+    <div class="-row"><span>{{ 'blockDetails.parentHash' | translate }}</span><br class="-xs-only" /><div> <a [routerLink]="'/app/block/' + (block.id-1)" class="-link" *ngIf="block && block.id != 0">{{ block.parent_hash }}</a> <app-copy-button [text]="block.parent_hash" *ngIf="block && block.id != 0"></app-copy-button> <span *ngIf="block && block.id == 0">{{ 'blockDetails.withoutParent' | translate }}</span> <span *ngIf="!block">{{ loadingMsg }}</span> </div></div>
+    <div class="-row"><span>{{ 'blockDetails.totalAmount' | translate }}</span><br class="-xs-only" /><div> {{ block ? ((block.transactions | transactionsValue) | number:'1.0-6') + ' ' + ('general.coinIdentifier' | translate) : loadingMsg }} </div></div>
+  </div>
+</div>
+
+<app-loading [longErrorMsg]="longErrorMsg" *ngIf="block === undefined"></app-loading>
+
+<div *ngIf="block">
+  <app-transaction-info *ngFor="let transaction of block.transactions" [transaction]="transaction"></app-transaction-info>
 </div>

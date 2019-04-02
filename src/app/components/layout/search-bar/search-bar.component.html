@@ -1,6 +1,7 @@
 <form (submit)="search()">
   <div class="-search-bar-container">
-    <img src="/assets/img/search.svg" (click)="search()">
-    <input [(ngModel)]="query" name="query" placeholder="Address, block hash or number, or transaction ID">
+    <img src="/assets/img/search.svg" (click)="search()" *ngIf="!searching" />
+    <i class="fa fa-spinner fa-spin fa-fw" *ngIf="searching"></i>
+    <input [(ngModel)]="query" name="query" placeholder="{{ 'searchBar.hint' | translate }}">
   </div>
 </form>

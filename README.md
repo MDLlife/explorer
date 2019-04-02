@@ -1,15 +1,48 @@
-[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](https://mdl.life)
+![skycoin explorer logo](https://user-images.githubusercontent.com/26845312/32426909-047fb2ae-c283-11e7-8031-6e88585a53c8.png)
 
-# MDL Explorer
+# Skycoin Explorer
 
-[![Build Status](https://travis-ci.org/MDLlife/explorer.svg)](https://travis-ci.org/MDLlife/explorer)
+[![Build Status](https://travis-ci.org/skycoin/skycoin-explorer.svg?branch=develop)](https://travis-ci.org/skycoin/skycoin-explorer)
 
-https://explorer.mdl.life
+https://explorer.skycoin.net
 
-## Requirements
+Skycoin Explorer is a tool to interact with Skycoin ecosystem.
+
+You can check blocks, transactions and their states.
+
+[https://explorer.skycoin.net](https://explorer.skycoin.net)
+
+# Table of Contents
+
+<!-- MarkdownTOC levels="1,2,3,4,5" autolink="true" bracket="round" -->
+
+- [Installation](#installation)
+	- [Requirements](#requirements)
+	- [Go](#go)
+	- [Angular](#angular)
+- [Docker images](#docker-images)
+- [API documentation](#api-documentation)
+- [Usage](#usage)
+	- [Run a skycoin node](#run-a-skycoin-node)
+	- [Build the explorer frontend](#build-the-explorer-frontend)
+	- [Run the explorer](#run-the-explorer)
+- [Development](#development)
+	- [Compiling the angular frontend](#compiling-the-angular-frontend)
+	- [Formatting](#formatting)
+	- [Code Linting](#code-linting)
+	- [e2e Tests](#e2e-tests)
+	- [Customization](#customization)
+- [Deployment](#deployment)
+
+<!-- /MarkdownTOC -->
+
+
+## Installation
+
+### Requirements
 
 ```
-go>=1.8
+go>=1.10
 node>=v6.9.0
 npm>=3.10.10
 ```
@@ -18,7 +51,7 @@ npm>=3.10.10
 
 The server is written in golang.
 
-The golang server returns the static content from `dist/` and proxies a subset of the MDL node API.
+The golang server returns the static content from `dist/` and proxies a subset of the skycoin node API.
 
 ### Angular
 
@@ -28,15 +61,37 @@ After cloning the project, you will need to run `npm install` to pull in all jav
 
 The angular code is compiled to the `dist/` folder.
 
+## Docker images
+
+If you want to run Explorer on Docker refer to [Docker instructions](docker/images/README.md)
+
+## API documentation
+
+HTML documentation:
+
+http://explorer.skycoin.net/api.html
+
+JSON formatted API docs:
+
+http://explorer.skycoin.net/api/docs
+
 ## Usage
 
-### Run MDL node
+### Run a skycoin node
 
 ```sh
-go get github.com/MDLlife/MDL
-cd $GOPATH/src/github.com/MDLlife/MDL
+git clone github.com/skycoin/skycoin
+cd skycoin
 ./run.sh
 ```
+
+### Build the explorer frontend
+
+```sh
+make build-ng
+```
+
+Note: if you do not want to install NPM or build the frontend, you can use a docker image to run the explorer.
 
 ### Run the explorer
 
@@ -46,12 +101,12 @@ make run
 
 This must be run from the same directory that contains `dist/`.
 
-The explorer assumes that the MDL node is running on `localhost:8320` by default.
+The explorer assumes that the skycoin node is running on `localhost:6420` by default.
 
 To point it at a different address:
 
 ```sh
-MDL_ADDR=http://127.0.0.1:3333 ./explorer
+SKYCOIN_ADDR=http://127.0.0.1:3333 ./explorer
 ```
 
 `explorer` can be run in api-only mode, which will expose the JSON API but not serve the static content from `dist/`:
@@ -59,19 +114,6 @@ MDL_ADDR=http://127.0.0.1:3333 ./explorer
 ```sh
 make run-api
 ```
-
-### Docker images
-
-```
-$ docker build -t MDLlife/explorer .
-$ docker run -p 8001:8001 MDLlife/explorer
-```
-
-Access the explorer: [http://localhost:8001](http://localhost:8001).
-
-The `MDL_ADDR` and the `EXPLORER_HOST` environment variables can be passed
-to the running container to modify the default behavior.
-
 
 ## Development
 
@@ -108,6 +150,26 @@ Run linters:
 ```sh
 make lint
 ```
+
+### e2e Tests
+
+If you are running a Skycoin node normally, you can run the e2e tests with:
+
+```sh
+npm run e2e
+```
+
+If you are running a Skycoin node using the test database (`blockchain-180.db`), you can run the e2e tests with:
+
+```sh
+npm run e2e-blockchain-180
+```
+
+The second method is the one used in Travis.
+
+### Customization
+
+[CUSTOMIZATION.md](CUSTOMIZATION.md)
 
 ## Deployment
 
