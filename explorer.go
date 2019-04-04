@@ -152,7 +152,7 @@ func (s APIEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	skycoinURL := buildSkycoinURL(s.SkycoinPath, query)
 
-	log.Printf("Proxying request %s to skycoin node %s with timeout %v", r.URL.String(), skycoinURL, skycoinRequestTimeout)
+	log.Printf("Proxying request %s to MDL node %s with timeout %v", r.URL.String(), skycoinURL, skycoinRequestTimeout)
 
 	c := &http.Client{
 		Timeout: skycoinRequestTimeout,
@@ -160,7 +160,7 @@ func (s APIEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := c.Get(skycoinURL)
 	if err != nil {
-		msg := "Request to skycoin node failed"
+		msg := "Request to MDL node failed"
 		log.Println("ERROR:", msg, skycoinURL)
 		http.Error(w, msg, http.StatusInternalServerError)
 		return
@@ -187,7 +187,7 @@ func (s APIEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if n, err := io.Copy(w, resp.Body); err != nil {
-		msg := "Copying response from skycoin node to client failed"
+		msg := "Copying response from MDL node to client failed"
 		if n != 0 {
 			msg += fmt.Sprintf(", after %d bytes were written", n)
 		}
@@ -378,7 +378,7 @@ var apiEndpoints = []APIEndpoint{
 		SkycoinPath:    "/api/v1/blocks",
 		QueryArgs:      []string{"start", "end", "verbose"},
 		Description:    "Returns information about a range of blocks, given a start and end block sequence number. The range of blocks will include both the start and end sequence numbers. Assign 1 to the \"verbose\" argument to get more data in the response.",
-		ExampleRequest: "https://explorer.skycoin.net/api/blocks?start=1891&end=1892",
+		ExampleRequest: "https://explorer.mdl.wtf/api/blocks?start=1891&end=1892",
 		ExampleResponse: `{
     "blocks": [
         {
@@ -1205,7 +1205,7 @@ func jsonDocs(w http.ResponseWriter, r *http.Request) {
 }
 
 const docTemplate string = `<html><head>
-<title>Skycoin Explorer API Documentation</title>
+<title>MDL Explorer API Documentation</title>
 <style type="text/css">
 code { white-space: pre; }
 pre { background: #F7FAFB; }
@@ -1214,15 +1214,15 @@ code.inline { border-radius: 3px; padding: 0.2em; background-color: #F7FAFB; fon
 </style>
 </head><body><div id="main">
 
-<h1>Skycoin Explorer API Documentation</h1>
+<h1>MDL Explorer API Documentation</h1>
 
 <div>
 <p>
-<p>The Skycoin Explorer API proxies a subset of a Skycoin node's API.</p>
+<p>The MDL Explorer API proxies a subset of MDL node's API.</p>
 <p>All endpoints start with /api</p>
-<p>Further information about an endpoint can be found at the Skycoin repo.</p>
-<p>Skycoin Github:<a href="https://github.com/skycoin/skycoin">https://github.com/skycoin/skycoin</a>.</p>
-<p>Skycoin Explorer Github: <a href="https://github.com/skycoin/skycoin-explorer">https://github.com/skycoin/skycoin-explorer</a></p>
+<p>Further information about an endpoint can be found at the MDL repo.</p>
+<p>MDL Github:<a href="https://github.com/MDLlife/MDL">https://github.com/MDLlife/MDL</a>.</p>
+<p>MDL Explorer Github: <a href="https://github.com/MDLlife/explorer">https://github.com/MDLlife/explorer</a></p>
 </p>
 </div>
 
@@ -1262,7 +1262,7 @@ code.inline { border-radius: 3px; padding: 0.2em; background-color: #F7FAFB; fon
 {{ end }}
 
 {{ if .SkycoinPath }}
-<p>Internal skycoin node path:</p>
+<p>Internal MDL node path:</p>
 <p class="example"><code class="inline">{{ .SkycoinPath }}</code></p>
 {{ end }}
 
@@ -1350,7 +1350,7 @@ func main() {
 		gzipHandle("/api.html", http.HandlerFunc(htmlDocs))
 	}
 
-	log.Printf("Running skycoin explorer on http://%s", explorerHost)
+	log.Printf("Running MDL explorer on http://%s", explorerHost)
 
 	s := &http.Server{
 		Addr:         explorerHost,

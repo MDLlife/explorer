@@ -4,13 +4,13 @@
 
 [![Build Status](https://travis-ci.org/skycoin/skycoin-explorer.svg?branch=develop)](https://travis-ci.org/skycoin/skycoin-explorer)
 
-https://explorer.skycoin.net
+https://explorer.mdl.wtf
 
-Skycoin Explorer is a tool to interact with Skycoin ecosystem.
+MDL Explorer is a tool to interact with MDL blockchain ecosystem.
 
 You can check blocks, transactions and their states.
 
-[https://explorer.skycoin.net](https://explorer.skycoin.net)
+[https://explorer.mdl.wtf](https://explorer.mdl.wtf)
 
 # Table of Contents
 
@@ -69,11 +69,11 @@ If you want to run Explorer on Docker refer to [Docker instructions](docker/imag
 
 HTML documentation:
 
-http://explorer.skycoin.net/api.html
+http://explorer.mdl.wtf/api.html
 
 JSON formatted API docs:
 
-http://explorer.skycoin.net/api/docs
+http://explorer.mdl.wtf/api/docs
 
 ## Usage
 
